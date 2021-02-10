@@ -15,7 +15,8 @@ end
 inputs = {
   type: presence(ENV['INPUT_TYPE']) || MergeBrachService::TYPE_LABELED, # labeled | comment | now
   label_name: ENV['INPUT_LABEL_NAME'],
-  target_branch: ENV['INPUT_TARGET_BRANCH']
+  target_branch: ENV['INPUT_TARGET_BRANCH'],
+  commit_message: ENV['INPUT_COMMIT_MESSAGE']
 }
 
 MergeBrachService.validate_inputs!(inputs)
@@ -23,7 +24,12 @@ service = MergeBrachService.new(inputs, @event)
 
 if service.valid?
   @client = Octokit::Client.new(access_token: @github_token)
-  @client.merge(@repository, inputs[:target_branch], @head_to_merge)
+  
+  merge_options = {}
+  merge_options[:commit_message] = inputs[:commit_message] if inputs[:commit_message]
+  
+  @client.merge(@repository, inputs[:target_branch], @head_to_merge, merge_options)
+  
   puts "Finish merge branch to #{inputs[:target_branch]}"
 else
   puts 'Skip'
