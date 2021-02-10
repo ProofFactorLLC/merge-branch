@@ -4,7 +4,7 @@ class MergeBrachService
   TYPE_LABELED = "labeled".freeze
   TYPE_NOW = "now".freeze
 
-  def self.validate_inputs!(target_branch:, type:, label_name:)
+  def self.validate_inputs!(target_branch:, type:, label_name:, commit_message: nil)
     raise "Invalid type" unless [TYPE_LABELED, TYPE_NOW].include?(type)
     raise "Empty target branch" unless target_branch
     if type == TYPE_LABELED
