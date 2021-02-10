@@ -18,6 +18,9 @@ inputs:
   head_to_merge:
     description: 'The branch name or hash to merge. default GITHUB_SHA'
     required: false
+  commit_message:
+    description: 'The merge commit message'
+    required: false  
   github_token:
     description: 'Github token'
     required: true
